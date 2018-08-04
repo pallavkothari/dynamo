@@ -5,7 +5,7 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
-	}
+    }
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
@@ -40,23 +40,12 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter')
+	compile('com.amazonaws:aws-java-sdk-dynamodb:1.11.380')
     testCompile('com.google.truth:truth:0.42')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.3.0-M1')
-    testCompile('org.junit.jupiter:junit-jupiter-params:5.3.0-M1')
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.3.0-M1')
-    compileOnly('org.projectlombok:lombok:1.18.2')
-    compile('com.squareup.okhttp3:okhttp:3.11.0')
-    compile('com.google.code.gson:gson:2.8.5')
-    compile('com.google.guava:guava:26.0-jre')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
-	runtime('org.springframework.boot:spring-boot-devtools')
-	runtime('com.h2database:h2')
-	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
