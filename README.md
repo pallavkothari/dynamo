@@ -8,7 +8,14 @@ java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 ```
 _[read aws instructions here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html#DynamoDBLocal.Maven)_ 
 
-Set up your env and run the tests:
+Test local dynamo is up: 
+```bash 
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+# or once there's an item: 
+aws dynamodb get-item --table-name User --key='{"id":{"S":"someId"}}'  --endpoint-url http://localhost:8000
+```
+
+Back in this project dir, set up your env and run the tests:
 ```bash
 cat << EOF > .envrc
 export dynamo_endpoint="http://localhost:8000/"
