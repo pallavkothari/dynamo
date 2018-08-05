@@ -3,6 +3,8 @@ package com.pk
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.SaveBehavior.APPEND_SET
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
@@ -75,10 +77,8 @@ class DynamoApplicationTests {
         simpleSave()
         val toSave = key.copy(integerSetAttribute = setOf(2))
         // see https://aws.amazon.com/blogs/developer/using-the-savebehavior-configuration-for-the-dynamodbmapper/
-        dbMapper.save(
-            toSave,
-            DynamoDBMapperConfig.builder().withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.APPEND_SET).build()
-        )
+        val appendSetBehavior = DynamoDBMapperConfig.builder().withSaveBehavior(APPEND_SET).build()
+        dbMapper.save(toSave, appendSetBehavior)
         val (_, firstName, lastName, integerSetAttribute) = dbMapper.load(key)
         assertThat(firstName).isEqualTo("p")
         assertThat(lastName).isEqualTo("k")
@@ -90,10 +90,8 @@ class DynamoApplicationTests {
         // there's no delete so just update the set with update_skip_nulls
         simpleSave()
         val toSave = key.copy(integerSetAttribute = setOf(2))
-        dbMapper.save(
-            toSave,
-            DynamoDBMapperConfig.builder().withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES).build()
-        )
+        val updateSkipNullsBehavior = DynamoDBMapperConfig.builder().withSaveBehavior(UPDATE_SKIP_NULL_ATTRIBUTES).build()
+        dbMapper.save(toSave, updateSkipNullsBehavior)
         val (_, firstName, lastName, integerSetAttribute) = dbMapper.load(key)
         assertThat(integerSetAttribute).isEqualTo(setOf(2))
         assertThat(firstName).isEqualTo("p")
