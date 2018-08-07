@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.SaveBehavior.APPEND_SET
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
@@ -97,4 +98,18 @@ class DynamoApplicationTests {
         assertThat(firstName).isEqualTo("p")
         assertThat(lastName).isEqualTo("k")
     }
+
+    @Test
+    fun scan() {
+        for (i in 1..10) {
+            dbMapper.save(User("user$i", integerSetAttribute = setOf(i)))
+        }
+        val paginatedScanList = dbMapper.scan(User::class.java, DynamoDBScanExpression())
+        println("found ${paginatedScanList.size} items")
+        assertThat(paginatedScanList.size).isEqualTo(10)
+        paginatedScanList.forEach {
+            println(it)
+        }
+    }
+
 }
